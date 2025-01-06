@@ -1,0 +1,34 @@
+export const TopMeal = [
+    {
+        image:"https://media.istockphoto.com/id/1349383878/vi/anh/pizza-hawaii-v%E1%BB%9Bi-gi%C4%83m-b%C3%B4ng-v%C3%A0-d%E1%BB%A9a.jpg?s=1024x1024&w=is&k=20&c=CD_yKmoOcehODutceLIrmPlmWfmvjJfoja0oLv_kqWk=",
+        title:"Pizza"
+    },
+    {
+        image:"https://media.istockphoto.com/id/1349383878/vi/anh/pizza-hawaii-v%E1%BB%9Bi-gi%C4%83m-b%C3%B4ng-v%C3%A0-d%E1%BB%A9a.jpg?s=1024x1024&w=is&k=20&c=CD_yKmoOcehODutceLIrmPlmWfmvjJfoja0oLv_kqWk=",
+        title:"Pizza"
+    },
+    {
+        image:"https://media.istockphoto.com/id/1349383878/vi/anh/pizza-hawaii-v%E1%BB%9Bi-gi%C4%83m-b%C3%B4ng-v%C3%A0-d%E1%BB%A9a.jpg?s=1024x1024&w=is&k=20&c=CD_yKmoOcehODutceLIrmPlmWfmvjJfoja0oLv_kqWk=",
+        title:"Pizza"
+    },
+    {
+        image:"https://media.istockphoto.com/id/1349383878/vi/anh/pizza-hawaii-v%E1%BB%9Bi-gi%C4%83m-b%C3%B4ng-v%C3%A0-d%E1%BB%A9a.jpg?s=1024x1024&w=is&k=20&c=CD_yKmoOcehODutceLIrmPlmWfmvjJfoja0oLv_kqWk=",
+        title:"Pizza"
+    },
+    {
+        image:"https://media.istockphoto.com/id/1349383878/vi/anh/pizza-hawaii-v%E1%BB%9Bi-gi%C4%83m-b%C3%B4ng-v%C3%A0-d%E1%BB%A9a.jpg?s=1024x1024&w=is&k=20&c=CD_yKmoOcehODutceLIrmPlmWfmvjJfoja0oLv_kqWk=",
+        title:"Pizza"
+    },
+    {
+        image:"https://media.istockphoto.com/id/1349383878/vi/anh/pizza-hawaii-v%E1%BB%9Bi-gi%C4%83m-b%C3%B4ng-v%C3%A0-d%E1%BB%A9a.jpg?s=1024x1024&w=is&k=20&c=CD_yKmoOcehODutceLIrmPlmWfmvjJfoja0oLv_kqWk=",
+        title:"Pizza"
+    },
+    {
+        image:"https://media.istockphoto.com/id/1349383878/vi/anh/pizza-hawaii-v%E1%BB%9Bi-gi%C4%83m-b%C3%B4ng-v%C3%A0-d%E1%BB%A9a.jpg?s=1024x1024&w=is&k=20&c=CD_yKmoOcehODutceLIrmPlmWfmvjJfoja0oLv_kqWk=",
+        title:"Pizza"
+    },
+    {
+        image:"https://media.istockphoto.com/id/1349383878/vi/anh/pizza-hawaii-v%E1%BB%9Bi-gi%C4%83m-b%C3%B4ng-v%C3%A0-d%E1%BB%A9a.jpg?s=1024x1024&w=is&k=20&c=CD_yKmoOcehODutceLIrmPlmWfmvjJfoja0oLv_kqWk=",
+        title:"Pizza"
+    },
+]

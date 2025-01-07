@@ -38,6 +38,7 @@ const Home = () => {
                     {restaurants.map((item) => <RestaurantCard/>)}
                 </div>
             </section>
+
         </div>
     );
 };

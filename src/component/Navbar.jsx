@@ -1,14 +1,33 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { motion } from 'framer-motion';
 import SearchIcon from '@mui/icons-material/Search';
 import { Avatar, Badge, IconButton } from "@mui/material";
 import { pink } from "@mui/material/colors";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import {Person} from "@mui/icons-material";
+import {useNavigate} from "react-router-dom";
+import {useSelector} from "react-redux";
 
 const Navbar = () => {
+    const { auth } = useSelector(store => store)
+    const navigate = useNavigate()
+
+    const handleAvatarClick = () => {
+        if(auth.user?.role === "ROLE_CUSTOMER"){
+            navigate("/my-profile")
+        } else {
+            navigate("/admin/restaurant")
+        }
+    }
+
+    useEffect(() => {
+        console.log(auth)
+    }, []);
+
+
     return (
         <motion.div
-            className='flex justify-between px-5 z-50 py-[.8rem] bg-[#e91e63] lg:px-20'
+            className='flex justify-between sticky top-0 px-5 z-50 py-[.8rem] bg-[#e91e63] lg:px-20'
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
@@ -18,7 +37,7 @@ const Navbar = () => {
                 whileHover={{ scale: 1.1 }}
                 transition={{ type: "spring", stiffness: 300 }}
             >
-                <li className='logo font-semibold text-gray-300 text-2xl list-none'>
+                <li onClick={() => navigate('/')} className='logo font-semibold text-gray-300 text-2xl list-none'>
                     Vorder
                 </li>
             </motion.div>
@@ -34,7 +53,14 @@ const Navbar = () => {
 
 
                 <motion.div whileHover={{ rotate: 10 }} transition={{ type: "spring", stiffness: 200 }}>
-                    <Avatar sx={{ bgcolor: "white", color: pink.A400 }}>V</Avatar>
+                    {
+                        auth.user
+                            ? <Avatar onClick={handleAvatarClick} sx={{ bgcolor: "white", color: pink.A400 }}>{auth.user?.fullName[0].toUpperCase()}</Avatar>
+                            :
+                            <IconButton onClick={() => navigate('/account/login')}>
+                                <Person/>
+                            </IconButton>
+                    }
                 </motion.div>
 
                 <motion.div whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.9 }}>

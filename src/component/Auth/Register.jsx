@@ -2,7 +2,7 @@ import React from 'react';
 import {Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography} from "@mui/material";
 import {Field, Form, Formik} from "formik";
 import {useNavigate} from "react-router-dom";
-import {loginUser, registerUser} from "../State/Authentication/Action";
+import {loginUser, registerUser} from "../../State/Authentication/Action";
 import {useDispatch} from "react-redux";
 
 const initialValues = {

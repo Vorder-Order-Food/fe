@@ -10,7 +10,7 @@ import AddIcon from '@mui/icons-material/Add';
 import {Divider, Drawer, useMediaQuery} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
-import {logout} from "../State/Authentication/Action";
+import {logout} from "../../State/Authentication/Action";
 
 const menu = [
     {title:'Orders', icon: <ShoppingBagIcon/>},

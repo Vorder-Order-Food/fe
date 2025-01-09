@@ -6,7 +6,7 @@ import {
     REGISTER_REQUEST,
     REGISTER_SUCCESS
 } from "./ActionType";
-import {isPresentInFavorites} from "../../config/logic";
+import {isPresentInFavorites} from "../../component/config/logic";
 
 const initialState={
     user:null,

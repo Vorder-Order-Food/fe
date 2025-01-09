@@ -8,7 +8,7 @@ import {
     REGISTER_SUCCESS
 } from "./ActionType";
 import axios from "axios";
-import {api, API_URL} from "../../config/api";
+import {api, API_URL} from "../../component/config/api";
 
 export const registerUser=(reqData)=>async(dispatch)=>{
     dispatch({type:REGISTER_REQUEST})

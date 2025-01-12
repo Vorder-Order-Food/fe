@@ -9,20 +9,17 @@ import {useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 
 const Navbar = () => {
-    const { auth } = useSelector(store => store)
+    const { user } = useSelector((store) => store.auth)
+    const { cart } = useSelector((store) => store.cart)
     const navigate = useNavigate()
 
     const handleAvatarClick = () => {
-        if(auth.user?.role === "ROLE_CUSTOMER"){
+        if(user?.role === "ROLE_CUSTOMER"){
             navigate("/my-profile")
         } else {
             navigate("/admin/restaurant")
         }
     }
-
-    useEffect(() => {
-        console.log(auth)
-    }, []);
 
 
     return (
@@ -54,8 +51,8 @@ const Navbar = () => {
 
                 <motion.div whileHover={{ rotate: 10 }} transition={{ type: "spring", stiffness: 200 }}>
                     {
-                        auth.user
-                            ? <Avatar onClick={handleAvatarClick} sx={{ bgcolor: "white", color: pink.A400 }}>{auth.user?.fullName[0].toUpperCase()}</Avatar>
+                        user
+                            ? <Avatar onClick={handleAvatarClick} sx={{ bgcolor: "white", color: pink.A400 }}>{user?.fullName[0].toUpperCase()}</Avatar>
                             :
                             <IconButton onClick={() => navigate('/account/login')}>
                                 <Person/>
@@ -64,8 +61,8 @@ const Navbar = () => {
                 </motion.div>
 
                 <motion.div whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.9 }}>
-                    <IconButton>
-                        <Badge color='success' badgeContent={3}>
+                    <IconButton onClick={() => navigate("/cart")}>
+                        <Badge color='success' badgeContent={cart?.items?.length}>
                             <ShoppingCartIcon sx={{ fontSize: "1.5rem" }} />
                         </Badge>
                     </IconButton>

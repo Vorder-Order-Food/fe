@@ -1,33 +1,61 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Divider, FormControl, FormControlLabel, Grid, Radio, RadioGroup, Typography} from "@mui/material";
 import {assets} from "../../assets/assets";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import MenuCard from "./MenuCard";
 import {AppContext} from "../../context/AppContext";
+import {useNavigate, useParams} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {getRestaurantById, getRestaurantCategory} from "../../State/Restaurant/Action";
+import {getMenuItemsByRestaurantId} from "../../State/Menu/Action";
 
-const categories = [
-    "pizza",
-    "burger",
-    "chicken"
-]
-const foodType = [
+
+const foodTypes = [
     {label: "All", value: "all"},
     {label: "Vegetarian only", value: "vegetarian"},
     {label: "Non-Vegetarian", value: "non_vegetarian"},
     {label: "Seasonal", value: "seasonal"}
 ]
-const menu = [1, 1, 1, 1, 1]
 
 const RestaurantDetails = () => {
 
-    const {currency} = useContext(AppContext)
+    const {currency, jwt} = useContext(AppContext)
 
-    // const [foodType, setFoodType] = useState("all")
+    const [foodType, setFoodType] = useState("all")
+    const {id} = useParams()
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const { restaurant, categories } = useSelector((store) => store.restaurant)
+    const { menuItems } = useSelector((store) => store.menu);
+    const [selectedCategory, setSelectedCategory] = useState(" ");
+
 
     const handleFilter = (e) => {
+        setFoodType(e.target.value)
         console.log(e.target.value)
     }
+
+    const handleFilterCategory = (e, value) => {
+        setSelectedCategory(value)
+
+        console.log(e.target.value, e.target.name, value)
+    }
+
+    useEffect(() => {
+        dispatch(getRestaurantById({jwt, restaurantId: id}))
+        dispatch(getRestaurantCategory({jwt, restaurantId: id}))
+    }, []);
+
+    useEffect(() => {
+        dispatch(getMenuItemsByRestaurantId({jwt, restaurantId: id,
+            vegetarian: foodType==="vegetarian",
+            nonveg: foodType==="non_vegetarian",
+            seasonal: foodType==="seasonal",
+            foodCategory: selectedCategory}))
+
+    }, [selectedCategory, foodType]);
+
     return (
         <div className='px-5 lg:px-20'>
             <section>
@@ -35,11 +63,11 @@ const RestaurantDetails = () => {
                 <div>
                     <Grid container spacing={12}>
                         <Grid item xs={12}>
-                            <img src={assets.banner} alt='' className='w-full h-[40vh] object-cover'/>
+                            <img src={restaurant?.images[0]} alt='' className='w-full h-[40vh] object-cover'/>
                         </Grid>
 
                         <Grid item xs={12} lg={6}>
-                            <img src={assets.banner} alt='' className='w-full h-[40vh] object-cover'/>
+                            <img src={restaurant?.images[1]} alt='' className='w-full h-[40vh] object-cover'/>
                         </Grid>
 
                         <Grid item xs={12} lg={6}>
@@ -50,12 +78,10 @@ const RestaurantDetails = () => {
                 </div>
 
                 <div className='pt-3 pb-5'>
-                    <h1 className='text-4xl font-semibold'>Viet Nam Food</h1>
+                    <h1 className='text-4xl font-semibold'>{restaurant?.name}</h1>
 
                     <p className='text-gray-500 mt-1'>
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                        when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                        {restaurant?.description}
                     </p>
 
                     <div className='space-y-3 mt-3'>
@@ -88,8 +114,9 @@ const RestaurantDetails = () => {
                             </Typography>
 
                             <FormControl className='py-10 space-y-5' component={"fieldset"}>
-                                <RadioGroup onChange={(e) => handleFilter(e)} name="food_type" value={foodType}>
-                                    {foodType.map((item) =>
+                                <RadioGroup onChange={(e) => handleFilter(e)}
+                                            name="food_type" value={foodType}>
+                                    {foodTypes.map((item) =>
                                         <FormControlLabel
                                             key={item.value}
                                             value={item.value}
@@ -106,13 +133,16 @@ const RestaurantDetails = () => {
                             </Typography>
 
                             <FormControl className='py-10 space-y-5' component={"fieldset"}>
-                                <RadioGroup onChange={(e) => handleFilter(e)} name="categories" value={categories}>
-                                    {categories.map((item) =>
+                                <RadioGroup onChange={handleFilterCategory}
+                                            name="food_category"
+                                            value={selectedCategory}
+                                >
+                                    {categories?.map((item) =>
                                         <FormControlLabel
-                                            key={item}
-                                            value={item}
+                                            key={item.id}
+                                            value={item.name}
                                             control={<Radio/>}
-                                            label={item}/>)
+                                            label={item.name}/>)
                                     }
                                 </RadioGroup>
                             </FormControl>
@@ -122,7 +152,7 @@ const RestaurantDetails = () => {
                 </div>
 
                 <div className='space-y-5 lg:w-[80%] lg:pl-10'>
-                    {menu.map((item) => <MenuCard/>)}
+                    {menuItems.map((item, index) => <MenuCard key={index} item={item}/>)}
                 </div>
             </section>
         </div>

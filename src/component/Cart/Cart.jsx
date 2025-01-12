@@ -6,6 +6,8 @@ import AddressCard from "./AddressCard";
 import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
+import {useDispatch, useSelector} from "react-redux";
+import {createOrder} from "../../State/Orders/Action";
 
 const items = [1,1]
 
@@ -38,9 +40,13 @@ const validationSchema = Yup.object().shape({
 
 const Cart = () => {
 
-    const {currency} = useContext(AppContext);
+    const {currency, jwt} = useContext(AppContext);
     const [open, setOpen] = React.useState(false);
     const handleClose = () => setOpen(false);
+
+    const { cartItems, cart } = useSelector((store) => store.cart)
+    const { user } = useSelector((store) => store.auth)
+    const dispatch = useDispatch()
 
     const createOrderUsingSelectedAddress = () => {
 
@@ -50,15 +56,30 @@ const Cart = () => {
         setOpen(true)
     }
 
-    const handleSubmit = async (e) => {
-        console.log(e)
+    const handleSubmit = async (values) => {
+        const data ={
+            jwt: jwt,
+            order:{
+                restaurantId: cartItems[0].food?.restaurant.id,
+                deliveryAddress: {
+                    fullName: user?.fullName,
+                    streetAddress: values.streetAddress,
+                    city: values.city,
+                    state: values.state,
+                    postalCode: values.pincode,
+                    country: "viet nam"
+                }
+            }
+        }
+        dispatch(createOrder(data))
+        console.log("form value", values)
     }
     return (
         <>
             <main className='lg:flex justify-between'>
                 <section className='lg:w-[30%] space-y-6 lg:min-h-screen pt-10'>
                     {
-                        items.map((item) => <CartItem/>)
+                       cartItems?.map((item) => <CartItem key={item.id} item={item}/>)
                     }
 
                     <Divider/>
@@ -68,7 +89,7 @@ const Cart = () => {
                         <div className='space-y-3'>
                             <div className='flex justify-between text-gray-400'>
                                 <p>Item Total</p>
-                                <p>{currency}400</p>
+                                <p>{currency} {cart?.total}</p>
                             </div>
 
                             <div className='flex justify-between text-gray-400'>
@@ -84,7 +105,7 @@ const Cart = () => {
                         </div>
                         <div className='justify-between flex text-gray-400'>
                             <p>Total pay</p>
-                            <p>{currency}600</p>
+                            <p>{currency} {cart?.total + 33 + 21}</p>
                         </div>
                     </div>
                 </section>

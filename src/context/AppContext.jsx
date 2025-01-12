@@ -1,12 +1,15 @@
-import {createContext} from "react";
+import {createContext, useState} from "react";
 
 export const AppContext = createContext();
 
 const AppContextProvider = (props) => {
     const currency = '$'
 
+    const [jwt, setJwt] = useState(localStorage.getItem('jwt')
+        ? localStorage.getItem('jwt') : '');
+
     const value = {
-        currency
+        currency, jwt
     }
 
     return(

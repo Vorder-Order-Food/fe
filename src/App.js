@@ -5,23 +5,24 @@ import CustomerRoute from "./Routers/CustomerRoute";
 import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {getUser} from "./State/Authentication/Action";
+import {findCart} from "./State/Cart/Action";
 
 function App() {
 
     const dispatch = useDispatch()
-    const jwt = localStorage.getItem("jwt")
-    const {auth} = useSelector(store => store)
+    const token = localStorage.getItem("jwt")
+    const {jwt} = useSelector((store) => store.auth)
 
     useEffect(() => {
-        dispatch(getUser(auth.jwt || jwt))
-        console.log(auth)
-    }, [auth.jwt]);
+        dispatch(getUser(jwt || token))
+        dispatch(findCart(jwt || token))
+    }, [jwt]);
 
     return (
         <div>
             <ThemeProvider theme={darkTheme}>
                 <CssBaseline/>
-                <CustomerRoute />
+                <CustomerRoute/>
 
             </ThemeProvider>
         </div>

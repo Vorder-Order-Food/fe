@@ -9,8 +9,6 @@ import * as Yup from "yup";
 import {useDispatch, useSelector} from "react-redux";
 import {createOrder} from "../../State/Orders/Action";
 
-const items = [1,1]
-
 export const style = {
     position: 'absolute',
     top: '50%',
@@ -74,6 +72,7 @@ const Cart = () => {
         dispatch(createOrder(data))
         console.log("form value", values)
     }
+
     return (
         <>
             <main className='lg:flex justify-between'>

@@ -8,11 +8,10 @@ import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {removeCartItem, updateCartItem} from "../../State/Cart/Action";
 
-const CartItem = ({item}) => {
+const CartItem = ( { item } ) => {
 
     const {currency, jwt} = useContext(AppContext)
-    const { user } = useSelector((store) => store.auth)
-    // const { cart } = useSelector((store) => store.cart)
+
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const token = localStorage.getItem("jwt")

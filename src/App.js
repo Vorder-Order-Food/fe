@@ -6,6 +6,7 @@ import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {getUser} from "./State/Authentication/Action";
 import {findCart} from "./State/Cart/Action";
+import Routers from "./Routers/Routers";
 
 function App() {
 
@@ -22,7 +23,8 @@ function App() {
         <div>
             <ThemeProvider theme={darkTheme}>
                 <CssBaseline/>
-                <CustomerRoute/>
+                <Routers/>
+                {/*<CustomerRoute/>*/}
 
             </ThemeProvider>
         </div>

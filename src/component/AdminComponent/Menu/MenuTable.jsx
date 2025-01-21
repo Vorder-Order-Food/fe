@@ -13,8 +13,11 @@ import {
 } from "@mui/material";
 import CreateIcon from '@mui/icons-material/Create';
 import {Delete} from "@mui/icons-material";
+import {useNavigate} from "react-router-dom";
 
 const MenuTable = () => {
+
+    const navigate = useNavigate()
     return (
         <Box>
             <Card className='mt-1'>
@@ -22,7 +25,7 @@ const MenuTable = () => {
                     title={"Menu"}
                     sx={{pt:2, alignItems:"center"}}
                     action={
-                        <IconButton aria-label="settings">
+                        <IconButton onClick={() => navigate('/admin/restaurants/add-menu')} aria-label="settings">
                             <CreateIcon />
                         </IconButton>
                     }

@@ -4,10 +4,11 @@ import {Route, Routes} from "react-router-dom";
 import Dashboard from "./Dashboard";
 import Orders from "./Orders/Orders";
 import Menu from "./Menu/Menu";
-import Events from "./Events";
+import Events from "./Events/Events";
 import FoodCategory from "./FoodCategory/FoodCategory";
 import Ingredients from "./Ingredient/Ingredients";
 import Details from "./Details";
+import CreateMenuForm from "./Menu/CreateMenuForm";
 
 const Admin = () => {
 
@@ -31,6 +32,7 @@ const Admin = () => {
                         <Route path='/ingredients' element={<Ingredients/>}/>
                         <Route path='/event' element={<Events/>}/>
                         <Route path='/details' element={<Details/>}/>
+                        <Route path='/add-menu' element={<CreateMenuForm/>}/>
                     </Routes>
 
                 </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useEffect} from 'react';
 import {
     Box,
     Card,
@@ -13,6 +13,10 @@ import {
 } from "@mui/material";
 import CreateIcon from "@mui/icons-material/Create";
 import CreateFoodCategoryForm from "./CreateFoodCategoryForm";
+import {AppContext} from "../../../context/AppContext";
+import {useDispatch, useSelector} from "react-redux";
+import {getRestaurantCategory} from "../../../State/Restaurant/Action";
+import {fetchRestaurantOrder} from "../../../State/Restaurant Order/Action";
 
 
 const style = {
@@ -29,9 +33,17 @@ const style = {
 
 const FoodCategoryTable = () => {
 
+    const { jwt } = useContext(AppContext)
+    const dispatch = useDispatch()
+    const { usersRestaurant, categories } = useSelector((store) => store.restaurant)
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    useEffect(() => {
+        dispatch(getRestaurantCategory({jwt, restaurantId: usersRestaurant?.id}))
+
+    }, [jwt]);
 
     return (
         <Box>
@@ -57,15 +69,15 @@ const FoodCategoryTable = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {foodCategories.map((row) => (
+                            {categories.map((item) => (
                                 <TableRow
-                                    key={row.name}
+                                    key={item.name}
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 >
                                     <TableCell component="th" scope="row">
                                         {1}
                                     </TableCell>
-                                    <TableCell align="left">{row.calories}</TableCell>
+                                    <TableCell align="left">{item.name}</TableCell>
 
                                 </TableRow>
                             ))}

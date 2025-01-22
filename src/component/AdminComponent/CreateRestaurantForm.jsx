@@ -1,9 +1,12 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {useFormik} from "formik";
 import {Button, CircularProgress, Grid, IconButton, TextField} from "@mui/material";
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import CloseIcon from '@mui/icons-material/Close';
 import {uploadImageToCloudinary} from "./util/UploadImageToCloudinary";
+import {useDispatch} from "react-redux";
+import {createRestaurant} from "../../State/Restaurant/Action";
+import {AppContext} from "../../context/AppContext";
 
 
 const initialValues = {
@@ -25,6 +28,8 @@ const initialValues = {
 
 const CreateRestaurantForm = () => {
 
+    const dispatch = useDispatch()
+    const { jwt } = useContext(AppContext)
     const [uploadImage, setUploadImage] = useState(false)
     const formik = useFormik(
         {
@@ -53,6 +58,7 @@ const CreateRestaurantForm = () => {
                 }
 
                 console.log("data ---", data)
+                dispatch(createRestaurant({data, token: jwt}))
 
             }
         }

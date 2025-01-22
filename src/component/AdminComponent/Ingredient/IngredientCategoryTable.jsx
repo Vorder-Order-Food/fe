@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useEffect} from 'react';
 import {
     Box,
     Card,
@@ -14,6 +14,9 @@ import {
 import CreateIcon from "@mui/icons-material/Create";
 import CreateFoodCategoryForm from "../FoodCategory/CreateFoodCategoryForm";
 import CreateIngredientCategoryForm from "./CreateIngredientCategoryForm";
+import {AppContext} from "../../../context/AppContext";
+import {useDispatch, useSelector} from "react-redux";
+import {getIngredientCategory} from "../../../State/Ingredients/Action";
 
 const style = {
     position: 'absolute',
@@ -29,9 +32,21 @@ const style = {
 
 const IngredientCategoryTable = () => {
 
+    const { jwt } = useContext(AppContext)
+    const dispatch = useDispatch()
+    const { usersRestaurant } = useSelector((store) => store.restaurant)
+    const { category } = useSelector((store) => store.ingredients)
+
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    useEffect(() => {
+        dispatch(getIngredientCategory({
+            id: usersRestaurant?.id,
+            jwt
+        }))
+    }, [jwt]);
 
 
     return (
@@ -58,15 +73,15 @@ const IngredientCategoryTable = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {ingredientCategories.map((row) => (
+                            {category.map((item) => (
                                 <TableRow
-                                    key={row.name}
+                                    key={item.name}
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 >
                                     <TableCell component="th" scope="row">
-                                        {1}
+                                        {item.id}
                                     </TableCell>
-                                    <TableCell align="left">{row.calories}</TableCell>
+                                    <TableCell align="left">{item.name}</TableCell>
 
                                 </TableRow>
                             ))}

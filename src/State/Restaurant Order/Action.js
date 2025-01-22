@@ -1,6 +1,7 @@
 import {api} from "../../component/config/api";
 import {
-    GET_RESTAURANT_ORDER_REQUEST,
+    GET_RESTAURANT_ORDER_FAILURE,
+    GET_RESTAURANT_ORDER_REQUEST, GET_RESTAURANT_ORDER_SUCCESS,
     UPDATE_ORDER_STATUS_FAILURE,
     UPDATE_ORDER_STATUS_REQUEST,
     UPDATE_ORDER_STATUS_SUCCESS
@@ -11,7 +12,7 @@ export const updateOrderStatus = ({orderId, orderStatus, jwt}) => {
     return async (dispatch) => {
         dispatch({type: UPDATE_ORDER_STATUS_REQUEST});
         try{
-            const res = await api.put(`/api/admin/orders/${orderId}/${orderStatus}`, {} ,{
+            const res = await api.put(`/api/admin/order/${orderId}/${orderStatus}`, {} ,{
                 headers: {
                     Authorization: `Bearer ${jwt}`
                 }
@@ -40,10 +41,10 @@ export const fetchRestaurantOrder = ({restaurantId, orderStatus, jwt}) => {
             })
             const orders = data;
             console.log('restaurant order', orders)
-            dispatch({type: GET_RESTAURANT_ORDER_REQUEST, payload: orders})
+            dispatch({type: GET_RESTAURANT_ORDER_SUCCESS, payload: orders})
 
         }catch (e) {
-            dispatch({type: GET_RESTAURANT_ORDER_REQUEST, payload: e})
+            dispatch({type: GET_RESTAURANT_ORDER_FAILURE, payload: e})
         }
     }
 }

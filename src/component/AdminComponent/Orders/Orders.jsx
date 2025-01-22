@@ -5,7 +5,8 @@ import OrderTable from "./OrderTable";
 const orderStatus = [
     {label: "Pending", value:"PENDING"},
     {label: "Completed", value:"COMPLETED"},
-    {label: "All", value:"ALL"}
+    {label: "Out for delivery", value:"OUT_FOR_DELIVERY"},
+    {label: "Delivered", value:"DELIVERED"}
 ]
 const Orders = () => {
 

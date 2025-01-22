@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {useFormik} from "formik";
 import {uploadImageToCloudinary} from "../util/UploadImageToCloudinary";
 import {
@@ -15,6 +15,10 @@ import {
 } from "@mui/material";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import CloseIcon from "@mui/icons-material/Close";
+import {AppContext} from "../../../context/AppContext";
+import {useDispatch, useSelector} from "react-redux";
+import {createMenuItem} from "../../../State/Menu/Action";
+import {getIngredientsOfRestaurant} from "../../../State/Ingredients/Action";
 
 
 const ITEM_HEIGHT = 48;
@@ -43,12 +47,21 @@ const initialValues = {
 
 const CreateMenuForm = () => {
 
+    const { jwt } = useContext(AppContext)
+    const dispatch = useDispatch()
+    const { ingredients } = useSelector((store) => store.ingredients)
+    const { usersRestaurant, categories } = useSelector((store) => store.restaurant)
     const [uploadImage, setUploadImage] = useState(false)
+
     const formik = useFormik(
         {
             initialValues,
             onSubmit: (values) => {
                 values.restaurantId = 2
+                dispatch(createMenuItem({
+                    menu: values,
+                    jwt
+                }))
 
             }
         }
@@ -66,6 +79,15 @@ const CreateMenuForm = () => {
         updatedImages.splice(index, 1)
         formik.setFieldValue("images", updatedImages)
     }
+
+
+    useEffect(() => {
+        dispatch(getIngredientsOfRestaurant({
+            jwt,
+            id: usersRestaurant?.id
+        }))
+    }, [jwt]);
+
     return (
         <div className='py-10 px-5 lg:flex items-center justify-center min-h-screen'>
             <div className='lg:max-w-4xl'>
@@ -158,9 +180,8 @@ const CreateMenuForm = () => {
                                     onChange={formik.handleChange}
                                     name="category"
                                 >
-                                    <MenuItem value={10}>Ten</MenuItem>
-                                    <MenuItem value={20}>Twenty</MenuItem>
-                                    <MenuItem value={30}>Thirty</MenuItem>
+                                    { categories?.map((item) => <MenuItem value={item} key={item.id}>{item.name}</MenuItem>)}
+
                                 </Select>
                             </FormControl>
                         </Grid>
@@ -179,18 +200,18 @@ const CreateMenuForm = () => {
                                     renderValue={(selected) => (
                                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                                             {selected.map((value) => (
-                                                <Chip key={value} label={value} />
+                                                <Chip key={value.id} label={value.name} />
                                             ))}
                                         </Box>
                                     )}
                                     MenuProps={MenuProps}
                                 >
-                                    {[1,1,1,1].map((name, index) => (
+                                    {ingredients?.map((item, index) => (
                                         <MenuItem
-                                            key={name}
-                                            value={name}
+                                            key={item.id}
+                                            value={item}
                                         >
-                                            {name}
+                                            {item.name}
                                         </MenuItem>
                                     ))}
                                 </Select>
@@ -240,7 +261,7 @@ const CreateMenuForm = () => {
 
                     </Grid>
                     <Button variant='contained' color='primary' type='submit'>
-                        Create Menu Item
+                        Create Food
                     </Button>
                 </form>
 

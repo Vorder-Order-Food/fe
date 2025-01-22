@@ -1,8 +1,13 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {Button, TextField} from "@mui/material";
+import {useDispatch} from "react-redux";
+import {createCategory} from "../../../State/Restaurant/Action";
+import {AppContext} from "../../../context/AppContext";
 
 const CreateFoodCategoryForm = () => {
 
+    const { jwt } = useContext(AppContext)
+    const dispatch = useDispatch()
 
     const [formData, setFormData] = useState(
         {
@@ -10,13 +15,19 @@ const CreateFoodCategoryForm = () => {
             restaurantId: ''
         }
     )
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault()
+
         const data = {
             name : formData.categoryName,
             restaurantId: {
                 id: 1
             }
         }
+        dispatch(createCategory({
+            reqData: data,
+            jwt: jwt
+        }))
     }
 
     const handleInputChange = (e) => {

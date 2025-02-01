@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {Card, Chip, IconButton} from "@mui/material";
+import {Button, Card, Chip, IconButton} from "@mui/material";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import {assets} from "../../assets/assets";
@@ -8,6 +8,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {addToFavorite} from "../../State/Authentication/Action";
 import {AppContext} from "../../context/AppContext";
 import {isPresentInFavorites} from "../config/logic";
+import {addItemToCart} from "../../State/Cart/Action";
 
 const RestaurantCard = ({ restaurant }) => {
 
@@ -22,6 +23,21 @@ const RestaurantCard = ({ restaurant }) => {
         }
     }
 
+    const handleAddItemToCart = (e) => {
+
+        const regData = {
+            token: jwt,
+            cartItem: {
+                productId: restaurant.id,
+                quantity: 1,
+            }
+        }
+
+        dispatch(addItemToCart(regData))
+        console.log('cart', regData)
+    }
+
+
 
     const handleAddToFavorite = () => {
         dispatch(addToFavorite({jwt, restaurantId: restaurant.id}))
@@ -30,10 +46,7 @@ const RestaurantCard = ({ restaurant }) => {
         <div>
             <Card className='w-[18rem] '>
                 <div className={`${ true ? 'cursor-pointer' : 'cursor-not-allowed'} relative`}>
-                    <img src={restaurant.images[1]} className='w-full h-[10rem] rounded-t-md object-center' align=''/>
-
-                    <Chip size='small' className='absolute top-2 left-2' color={restaurant.open ? 'success' : 'error'}
-                    label={restaurant.open ? 'open' : 'closed'}/>
+                    <img src={restaurant.images[0]} className='w-full h-[10rem] rounded-t-md object-center' align=''/>
 
                 </div>
 
@@ -43,15 +56,17 @@ const RestaurantCard = ({ restaurant }) => {
                             {restaurant.name}
                         </p>
                         <p className='text-gray-500 text-sm'>
-                            {restaurant.description}
+                            {restaurant.price}
                         </p>
 
                     </div>
 
+
+
                     <div>
-                        <IconButton onClick={handleAddToFavorite}>
-                            {isPresentInFavorites(favorites, restaurant) ? <FavoriteIcon/> : <FavoriteBorderIcon/>}
-                        </IconButton>
+                        <Button onClick={handleAddItemToCart}>
+                            Add to cart
+                        </Button>
                     </div>
                 </div>
 

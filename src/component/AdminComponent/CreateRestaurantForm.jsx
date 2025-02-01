@@ -7,62 +7,51 @@ import {uploadImageToCloudinary} from "./util/UploadImageToCloudinary";
 import {useDispatch} from "react-redux";
 import {createRestaurant} from "../../State/Restaurant/Action";
 import {AppContext} from "../../context/AppContext";
+import {useNavigate} from "react-router-dom";
 
 
 const initialValues = {
     name: "",
-    streetAddress: "",
-    city: "",
-    stateProvince: "",
-    postalCode: "",
-    description: "",
-    cuisineType: "",
-    country: "",
-    email: "",
-    mobile: "",
-    twitter: "",
-    instagram: "",
-    openingHours: "Mon-Sun: 9:00 AM - 9:00 PM",
+    price: "",
     images: []
 }
 
 const CreateRestaurantForm = () => {
 
+    const navigate = useNavigate();
+
     const dispatch = useDispatch()
     const { jwt } = useContext(AppContext)
     const [uploadImage, setUploadImage] = useState(false)
-    const formik = useFormik(
-        {
-            initialValues,
-            onSubmit: (values) => {
-                const data = {
-                    name: values.name,
-                    description: values.description,
-                    cuisineType: values.cuisineType,
-                    address: {
-                        streetAddress: values.streetAddress,
-                        city: values.city,
-                        stateProvince: values.stateProvince,
-                        postalCode: values.postalCode,
-                        country: values.country,
-                    },
-                    contactInformation: {
-                        email: values.email,
-                        mobile: values.mobile,
-                        instagram: values.instagram,
-                        twitter: values.twitter,
-                    },
-                    openingHours: values.openingHours,
-                    images: values.images
+    const formik = useFormik({
+        initialValues,
+        validate: (values) => {
+            const errors = {};
 
+            if (!values.price || isNaN(values.price)) {
+                errors.price = 'Price must be a valid number';
+            } else {
+                const priceAsLong = parseInt(values.price, 10);
+                if (isNaN(priceAsLong)) {
+                    errors.price = 'Price must be a valid number';
                 }
-
-                console.log("data ---", data)
-                dispatch(createRestaurant({data, token: jwt}))
-
             }
+
+            return errors;
+        },
+        onSubmit: (values) => {
+            const priceAsLong = parseInt(values.price, 10);
+            const data = {
+                name: values.name,
+                price: priceAsLong,
+                images: values.images
+            };
+
+            console.log("data ---", data);
+            dispatch(createRestaurant({ data, token: jwt }));
         }
-    )
+    });
+
     const handleImageChange = async (e) => {
         const file = e.target.files[0]
         setUploadImage(true)
@@ -80,7 +69,7 @@ const CreateRestaurantForm = () => {
         <div className='py-10 px-5 lg:flex items-center justify-center min-h-screen'>
             <div className='lg:max-w-4xl'>
                 <h1 className='font-bold text-2xl text-center py-2'>
-                    Add New Restaurant Form
+                    Add New Food
                 </h1>
             <form onSubmit={formik.handleSubmit} className='space-y-4'>
                 <Grid container spacing={2}>
@@ -137,122 +126,19 @@ const CreateRestaurantForm = () => {
 
 
                     <Grid item xs={12} >
-                        <TextField fullWidth id='description' name='description' label='Desscription' variant='outlined'
+                        <TextField fullWidth id='price' name='price' label='Price' variant='outlined'
                                    onChange={formik.handleChange}
-                                   value={formik.values.description}
+                                   value={formik.values.price}
                         >
 
                         </TextField>
                     </Grid>
 
-
-                    <Grid item xs={12} lg={6} >
-                        <TextField fullWidth id='cuisineType' name='cuisineType' label='Cuisine Type' variant='outlined'
-                                   onChange={formik.handleChange}
-                                   value={formik.values.cuisineType}
-                        >
-
-                        </TextField>
-                    </Grid>
-
-
-                    <Grid item xs={12} lg={6}>
-                        <TextField fullWidth id='openingHours' name='openingHours' label='Opening Hours' variant='outlined'
-                                   onChange={formik.handleChange}
-                                   value={formik.values.openingHours}
-                        >
-
-                        </TextField>
-                    </Grid>
-
-                    <Grid item xs={12} >
-                        <TextField fullWidth id='streetAddress' name='streetAddress' label='Street Address' variant='outlined'
-                                   onChange={formik.handleChange}
-                                   value={formik.values.streetAddress}
-                        >
-
-                        </TextField>
-                    </Grid>
-
-
-                    <Grid item xs={12} >
-                        <TextField fullWidth id='city' name='city' label='City' variant='outlined'
-                                   onChange={formik.handleChange}
-                                   value={formik.values.city}
-                        >
-
-                        </TextField>
-                    </Grid>
-
-
-                    <Grid item xs={12}  lg={4} >
-                        <TextField fullWidth id='stateProvince' name='stateProvince' label='State' variant='outlined'
-                                   onChange={formik.handleChange}
-                                   value={formik.values.stateProvince}
-                        >
-
-                        </TextField>
-                    </Grid>
-
-                    <Grid item xs={12} lg={4} >
-                        <TextField fullWidth id='postalCode' name='postalCode' label='Postal Code' variant='outlined'
-                                   onChange={formik.handleChange}
-                                   value={formik.values.postalCode}
-                        >
-
-                        </TextField>
-                    </Grid>
-
-                    <Grid item xs={12} lg={4} >
-                        <TextField fullWidth id='country' name='country' label='Country' variant='outlined'
-                                   onChange={formik.handleChange}
-                                   value={formik.values.country}
-                        >
-
-                        </TextField>
-                    </Grid>
-
-
-                    <Grid item xs={12} lg={6} >
-                        <TextField fullWidth id='email' name='email' label='Email' variant='outlined'
-                                   onChange={formik.handleChange}
-                                   value={formik.values.email}
-                        >
-
-                        </TextField>
-                    </Grid>
-
-                    <Grid item xs={12} lg={6} >
-                        <TextField fullWidth id='mobile' name='mobile' label='Mobile' variant='outlined'
-                                   onChange={formik.handleChange}
-                                   value={formik.values.mobile}
-                        >
-
-                        </TextField>
-                    </Grid>
-
-                    <Grid item xs={12} lg={6}>
-                        <TextField fullWidth id='instagram' name='instagram' label='Instagram' variant='outlined'
-                                   onChange={formik.handleChange}
-                                   value={formik.values.instagram}
-                        >
-
-                        </TextField>
-                    </Grid>
-
-                    <Grid item xs={12} lg={6} >
-                        <TextField fullWidth id='twitter' name='twitter' label='twitter' variant='outlined'
-                                   onChange={formik.handleChange}
-                                   value={formik.values.twitter}
-                        >
-
-                        </TextField>
-                    </Grid>
 
                 </Grid>
 
                 <Button variant='contained' color='primary' type='submit'>
-                    Create Restaurant
+                    Create
                 </Button>
             </form>
 

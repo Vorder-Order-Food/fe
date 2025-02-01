@@ -93,9 +93,8 @@ const IngredientsTable = () => {
                                     </TableCell>
                                     <TableCell align="left">{item.name}</TableCell>
                                     <TableCell align="left">{item.category.name}</TableCell>
-                                    <TableCell align="left">{item.inStoke}</TableCell>
 
-                                   <TableCell>
+                                   <TableCell align="left">
                                        <Button onClick={() => handleUpdateStock(item.id)}>
                                            {item.inStoke ? 'in stock' : 'out of stock'}
                                        </Button>

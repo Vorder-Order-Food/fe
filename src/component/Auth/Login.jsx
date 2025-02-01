@@ -12,9 +12,11 @@ const initialValues = {
 const Login = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
+
     const handleSubmit = async (values) => {
         dispatch(loginUser({userData:values, navigate}))
     }
+
     return (
         <div>
             <Typography variant='h5' className='text-center'>
@@ -40,6 +42,7 @@ const Login = () => {
                         fullWidth
                         variant="outlined"
                         margin="normal"
+                        type="password"
                     />
 
                     <Button sx={{mt:2, padding:"1rem"}} fullWidth type='submit' variant='contained'>

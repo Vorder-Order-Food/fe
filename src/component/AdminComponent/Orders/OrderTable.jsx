@@ -8,8 +8,8 @@ import {
     CardHeader,
     Chip,
     Menu,
-    MenuItem,
-    Paper,
+    MenuItem, Pagination,
+    Paper, Stack,
     Table,
     TableBody,
     TableCell,
@@ -20,6 +20,7 @@ import {
 import { AppContext } from '../../../context/AppContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchRestaurantOrder, updateOrderStatus } from '../../../State/Restaurant Order/Action';
+import {getUserOrders} from "../../../State/Orders/Action";
 
 const orderStatus = [
     { label: 'Pending', value: 'PENDING' },
@@ -36,6 +37,23 @@ const OrderTable = () => {
 
     const [menuState, setMenuState] = useState({});
 
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
+
+
+    const indexOfLastOrder = currentPage * itemsPerPage;
+    const indexOfFirstOrder = indexOfLastOrder - itemsPerPage;
+    const currentOrders = orders
+        ?.slice()
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        .slice(indexOfFirstOrder, indexOfLastOrder);
+
+    const handlePageChange = (event, value) => {
+        setCurrentPage(value);
+    };
+
+
     const handleClick = (event, id) => {
         setMenuState({ [id]: event.currentTarget });
     };
@@ -43,6 +61,8 @@ const OrderTable = () => {
     const handleClose = (id) => {
         setMenuState((prevState) => ({ ...prevState, [id]: null }));
     };
+
+
 
     const handleUpdateOrderStatus = (orderId, orderStatus) => {
         dispatch(
@@ -73,48 +93,36 @@ const OrderTable = () => {
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
                             <TableRow>
-                                <TableCell>Id</TableCell>
-                                <TableCell align="right">Image</TableCell>
+                                {/*<TableCell align="right">Image</TableCell>*/}
                                 <TableCell align="right">Customer</TableCell>
                                 <TableCell align="right">Price</TableCell>
                                 <TableCell align="right">Name</TableCell>
-                                <TableCell align="right">Ingredients</TableCell>
                                 <TableCell align="right">Status</TableCell>
                                 <TableCell align="right">Update</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {orders.map((item) => (
+                            {currentOrders?.map((item) => (
                                 <TableRow key={item.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                    <TableCell component="th" scope="row">
-                                        {item.id}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        <AvatarGroup>
-                                            {item.items.map((orderItem, index) => (
-                                                <Avatar key={index} src={orderItem.food?.images} />
-                                            ))}
-                                        </AvatarGroup>
-                                    </TableCell>
-                                    <TableCell align="right">{item.customer?.fullName}</TableCell>
+
+                                    {/*<TableCell align="right">*/}
+                                    {/*    <AvatarGroup>*/}
+                                    {/*        {item.map((orderItem, index) => (*/}
+                                    {/*            <Avatar key={index} src={orderItem.food?.images} />*/}
+                                    {/*        ))}*/}
+                                    {/*    </AvatarGroup>*/}
+                                    {/*</TableCell>*/}
+                                    <TableCell align="right">{item?.username}</TableCell>
                                     <TableCell align="right">
                                         {currency}
                                         {item?.totalPrice}
                                     </TableCell>
                                     <TableCell align="right">
                                         {item?.items.map((orderItem, index) => (
-                                            <p key={index}>{orderItem.food?.name}</p>
+                                            <p key={index}>{orderItem?.productName}</p>
                                         ))}
                                     </TableCell>
-                                    <TableCell align="right">
-                                        {item.items?.map((orderItem, index) => (
-                                            <div key={index}>
-                                                {orderItem.ingredients.map((ingredient, idx) => (
-                                                    <Chip key={idx} label={ingredient} />
-                                                ))}
-                                            </div>
-                                        ))}
-                                    </TableCell>
+
                                     <TableCell align="right">{item.orderStatus}</TableCell>
 
                                     <TableCell align="right">
@@ -152,6 +160,15 @@ const OrderTable = () => {
                     </Table>
                 </TableContainer>
             </Card>
+
+            <Stack spacing={2} className="mt-5">
+                <Pagination
+                    count={Math.ceil((orders?.length || 0) / itemsPerPage)}
+                    page={currentPage}
+                    onChange={handlePageChange}
+                    color="primary"
+                />
+            </Stack>
         </Box>
     );
 };

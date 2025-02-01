@@ -46,12 +46,12 @@ export const getAllRestaurants = (token) => {
     return async (dispatch) => {
         dispatch({type: GET_ALL_RESTAURANTS_REQUEST});
         try{
-            const { data } = await api.get("/api/restaurants", {
+            const { data } = await api.get("/product/find-all", {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             })
-            dispatch({type: GET_ALL_RESTAURANTS_SUCCESS, payload: data})
+            dispatch({type: GET_ALL_RESTAURANTS_SUCCESS, payload: data.result})
 
         }catch (e) {
             dispatch({type: GET_ALL_RESTAURANTS_FAILURE, payload: e})
@@ -97,7 +97,7 @@ export const createRestaurant = (reqData) => {
     return async (dispatch) => {
         dispatch({type: CREATE_RESTAURANT_REQUEST});
         try{
-            const { data } = await api.post('/api/admin/restaurants/', reqData.data,{
+            const { data } = await api.post('/product/create', reqData.data,{
                 headers: {
                     Authorization: `Bearer ${reqData.token}`
                 }

@@ -1,13 +1,13 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {Box, Button, Card, Divider, Grid, Modal, TextField} from "@mui/material";
 import CartItem from "./CartItem";
 import {AppContext} from "../../context/AppContext";
-import AddressCard from "./AddressCard";
-import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
-import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import {useDispatch, useSelector} from "react-redux";
 import {createOrder} from "../../State/Orders/Action";
+import {clearCart, findCart} from "../../State/Cart/Action";
+import {useNavigate} from "react-router-dom";
+import Swal from "sweetalert2";
 
 export const style = {
     position: 'absolute',
@@ -21,19 +21,6 @@ export const style = {
     p: 4,
 };
 
-const initialValues = {
-    streetAddress: "",
-    state:"",
-    pincode:"",
-    city:""
-}
-
-const validationSchema = Yup.object().shape({
-    streetAddress: Yup.string().required("Street address is required !"),
-    state: Yup.string().required("State is required !"),
-    pincode: Yup.number().required("Pincode is required !"),
-    city: Yup.string().required("City is required !")
-})
 
 
 const Cart = () => {
@@ -41,37 +28,46 @@ const Cart = () => {
     const {currency, jwt} = useContext(AppContext);
     const [open, setOpen] = React.useState(false);
     const handleClose = () => setOpen(false);
+    const navigate = useNavigate()
 
     const { cartItems, cart } = useSelector((store) => store.cart)
-    const { user } = useSelector((store) => store.auth)
     const dispatch = useDispatch()
+
 
     const createOrderUsingSelectedAddress = () => {
 
     }
 
-    const openAddressModal = () => {
-        setOpen(true)
-    }
 
     const handleSubmit = async (values) => {
         const data ={
             jwt: jwt,
             order:{
-                restaurantId: cartItems[0].food?.restaurant.id,
-                deliveryAddress: {
-                    fullName: user?.fullName,
-                    streetAddress: values.streetAddress,
-                    city: values.city,
-                    state: values.state,
-                    postalCode: values.pincode,
-                    country: "viet nam"
-                }
+                // restaurantId: cartItems[0].food?.restaurant.id,
             }
         }
         dispatch(createOrder(data))
         console.log("form value", values)
+        await Swal.fire({
+            position: "top-end",
+            title: "Order Success! Please check your email!",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+            backdrop: false
+        });
+        dispatch(clearCart())
+        navigate("/my-profile/orders")
+
     }
+    const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+    useEffect(() => {
+        if (totalQuantity > 0) {
+            dispatch(findCart(jwt));
+        }
+        console.log(cartItems);
+    }, [totalQuantity, jwt]);
 
     return (
         <>
@@ -104,113 +100,23 @@ const Cart = () => {
                         </div>
                         <div className='justify-between flex text-gray-400'>
                             <p>Total pay</p>
-                            <p>{currency} {cart?.total + 33 + 21}</p>
+                            <p>{currency} {cart?.total + 40 + 20}</p>
                         </div>
                     </div>
+
+
+                    <Button fullWidth variant="contained" onClick={handleSubmit} color="primary">
+                        Save
+                    </Button>
                 </section>
+
 
                 <Divider orientation="vertical" flexItem />
-                <section className='lg:w-[70%] flex justify-center px-5 pb-10 lg:pb-0'>
-                    <div>
-                        <h1 className='text-center font-semibold text-2xl py-10'>Choose delevery address</h1>
 
-                        <div className='flex gap-5 flex-wrap justify-center'>
-                            {[1,1,1].map((item) => <AddressCard handleSelectAddress={createOrderUsingSelectedAddress} item={item} showButton={true}/>)}
-
-                            <Card className='flex gap-5 w-64 p-5'>
-                                <AddLocationAltIcon/>
-                                <div className='space-y-3 text-gray-500'>
-                                    <h1 className='font-semibold text-lg text-white'>Add new address</h1>
-
-                                    <Button  variant='outlined' fullWidth onClick={openAddressModal}>Add</Button>
-
-
-                                </div>
-                            </Card>
-                        </div>
-
-
-                    </div>
-                </section>
 
             </main>
 
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <Box sx={style}>
-                    <Formik
-                        initialValues={initialValues}
-                        onSubmit={(e) => handleSubmit(e)}
-                        validationSchema={validationSchema}
-                    >
-                        <Form>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12}>
-                                    <Field
-                                        as={TextField}
-                                        name="streetAddress"
-                                        label="Street Address"
-                                        fullWidth
-                                        variant="outlined"
-                                        // error={!ErrorMessage("streetAddress")}
-                                        // helperText={
-                                        // <ErrorMessage>
-                                        //     {(msg) => <span className='text-red-600'>{msg}</span>}
-                                        // </ErrorMessage>
-                                        // }
-                                    />
 
-                                </Grid>
-
-
-                                <Grid item xs={12}>
-                                    <Field
-                                        as={TextField}
-                                        name="state"
-                                        label="State"
-                                        fullWidth
-                                        variant="outlined"
-                                    />
-
-                                </Grid>
-
-                                <Grid item xs={12}>
-                                    <Field
-                                        as={TextField}
-                                        name="city"
-                                        label="City"
-                                        fullWidth
-                                        variant="outlined"
-                                    />
-
-                                </Grid>
-
-                                <Grid item xs={12}>
-                                    <Field
-                                        as={TextField}
-                                        name="pincode"
-                                        label="Pincode"
-                                        fullWidth
-                                        variant="outlined"
-                                    />
-
-                                </Grid>
-
-                                <Grid item xs={12}>
-                                    <Button fullWidth variant="contained" type="submit" color="primary">
-                                        Save
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </Form>
-
-                    </Formik>
-                </Box>
-            </Modal>
 
         </>
     );

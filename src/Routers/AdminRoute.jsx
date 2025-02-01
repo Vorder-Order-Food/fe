@@ -5,12 +5,21 @@ import Admin from "../component/AdminComponent/Admin";
 import {useSelector} from "react-redux";
 
 const AdminRoute = () => {
+
     const { usersRestaurant } = useSelector((store) => store.restaurant)
+
     return (
         <div>
+
+            {/*<Routes>*/}
+            {/*    <Route path='/*' element={ !usersRestaurant ? <CreateRestaurantForm/> : <Admin/>}/>*/}
+            {/*</Routes>*/}
+
             <Routes>
-                <Route path='/*' element={ !usersRestaurant ? <CreateRestaurantForm/> : <Admin/>}/>
+                <Route path='/*' element={ <Admin/>}/>
             </Routes>
+
+
         </div>
     );
 };

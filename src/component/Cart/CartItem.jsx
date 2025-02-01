@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {assets} from "../../assets/assets";
 import {Chip, IconButton} from "@mui/material";
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
@@ -33,17 +33,21 @@ const CartItem = ( { item } ) => {
         dispatch(removeCartItem({cartItemId: item.id, jwt: jwt || token}))
     }
 
+    useEffect(() => {
+
+    }, []);
+
 
     return (
         <div className='px-5'>
             <div className='lg:flex items-center lg:space-x-5'>
                 <div>
-                    <img className='w-[5rem] h-[5rem] object-cover' src={item.food.images[0]} alt='' />
+                    <img className='w-[5rem] h-[5rem] object-cover' src={item?.images[0]} alt='' />
                 </div>
 
                 <div className='flex items-center justify-between lg:w-[70%]'>
                     <div className='space-y-1 lg:space-y-3 w-full'>
-                        <p>{item.food.name}</p>
+                        <p>{item.productName}</p>
                         <div className='flex justify-between items-center'>
                             <div className='flex items-center space-x-1'>
                                 <IconButton onClick={() => handleUpdateCartItem(-1)}>
@@ -60,12 +64,6 @@ const CartItem = ( { item } ) => {
                     </div>
                     <p>{currency}{item.totalPrice}</p>
                 </div>
-            </div>
-
-            <div className='pt-3 space-x-2'>
-                {
-                    item.ingredients.map((ingredient, index) => <Chip key={index} label={ingredient}/>)
-                }
             </div>
 
         </div>

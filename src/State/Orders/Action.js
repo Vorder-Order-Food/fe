@@ -34,7 +34,7 @@ export const createOrder = (reqData) => {
     return async (dispatch) => {
         dispatch({type: CREATE_ORDER_REQUEST});
         try {
-            const {data} = await api.post(`/api/order`, reqData.order, {
+            const {data} = await api.post(`/order/create`, reqData, {
                 headers: {
                     Authorization: `Bearer ${reqData.jwt}`
                 }
@@ -56,7 +56,7 @@ export const getUserOrders = (jwt) => {
     return async (dispatch) => {
         dispatch({type: GET_USER_ORDERS_REQUEST});
         try {
-            const {data} = await api.get("/api/order/user",  {
+            const {data} = await api.get("/order/user",  {
                 headers: {
                     Authorization: `Bearer ${jwt}`
                 }

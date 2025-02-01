@@ -1,9 +1,12 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {Box, Button, Modal, TextField} from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import dayjs from "dayjs";
 import {DateTimePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {AppContext} from "../../../context/AppContext";
+import {useDispatch, useSelector} from "react-redux";
+import {createEvent} from "../../../State/Restaurant/Action";
 
 const style = {
     position: 'absolute',
@@ -30,6 +33,9 @@ const Events = () => {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+    const {jwt} = useContext(AppContext)
+    const dispatch = useDispatch()
+    const {usersRestaurant} = useSelector((store) => store.restaurant)
 
     const [formData, setFormData] = useState(initialValues)
 
@@ -37,6 +43,11 @@ const Events = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
         console.log("submit event", formData)
+        dispatch(createEvent({
+            data: formData,
+            jwt,
+            restaurantId: usersRestaurant?.id
+        }))
         setFormData(initialValues)
 
     }
@@ -45,16 +56,20 @@ const Events = () => {
         setFormData({...formData, [e.target.name]: e.target.value})
     }
 
+    // const handleDateChange = (date, dateType) => {
+    //     const formattedDate = dayjs(date).format("MMMM DD, YYYY hh:mm A")
+    //     setFormData({...formData, [dateType]: formattedDate})
+    // }
+
     const handleDateChange = (date, dateType) => {
-        const formattedDate = dayjs(date).format("MMMM DD, YYYY hh:mm A")
-        setFormData({...formData, [dateType]: formattedDate})
-    }
+        setFormData({ ...formData, [dateType]: date });
+    };
+
 
     return (
         <div>
             <div className='p-5'>
                 <Button onClick={handleOpen} variant='contained'>Create New Event</Button>
-
 
                 <Modal
                     open={open}
@@ -66,7 +81,7 @@ const Events = () => {
 
                         <form onSubmit={handleSubmit}>
                             <Grid container spacing={3}>
-                                <Grid item xs={12}>
+                                <Grid item size={12}>
                                     <TextField
                                         name='image'
                                         label='Image Url'
@@ -77,7 +92,7 @@ const Events = () => {
                                     />
                                 </Grid>
 
-                                <Grid item xs={12}>
+                                <Grid item size={12}>
                                     <TextField
                                         name='location'
                                         label='Location'
@@ -88,7 +103,7 @@ const Events = () => {
                                     />
                                 </Grid>
 
-                                <Grid item xs={12}>
+                                <Grid item size={12}>
                                     <TextField
                                         name='name'
                                         label='Event Name'
@@ -99,7 +114,7 @@ const Events = () => {
                                     />
                                 </Grid >
 
-                                <Grid item xs={12}>
+                                <Grid item size={12}>
                                     <LocalizationProvider dateAdapter={AdapterDayjs} >
                                         <DateTimePicker
                                             renderInput={(props => <TextField {...props} />)}
@@ -115,7 +130,7 @@ const Events = () => {
                                 </Grid>
 
 
-                                <Grid item xs={12}>
+                                <Grid item size={12}>
                                     <LocalizationProvider dateAdapter={AdapterDayjs} >
                                         <DateTimePicker
                                             renderInput={(props => <TextField {...props} />)}

@@ -19,7 +19,7 @@ export const findCart = (token) => {
     return async (dispatch) => {
         dispatch({type: FIND_CART_REQUEST});
         try{
-            const res = await api.get("/api/cart" ,{
+            const res = await api.get("/cart/user-cart" ,{
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -58,7 +58,7 @@ export const addItemToCart = (reqData) => {
     return async (dispatch) => {
         dispatch({type: ADD_ITEM_TO_CART_CART_REQUEST});
         try{
-            const {data} = await api.put("/api/cart/add", reqData.cartItem ,{
+            const {data} = await api.put("/cart/add", reqData.cartItem ,{
                 headers: {
                     Authorization: `Bearer ${reqData.token}`
                 }
@@ -78,7 +78,7 @@ export const updateCartItem = (reqData) => {
     return async (dispatch) => {
         dispatch({type: UPDATE_CART_ITEM_REQUEST});
         try{
-            const {data} = await api.put("/api/cart-item/update", reqData.data ,{
+            const {data} = await api.put("/cart/cart-item/update", reqData.data ,{
                 headers: {
                     Authorization: `Bearer ${reqData.jwt}`
                 }
@@ -97,7 +97,7 @@ export const removeCartItem = ({cartItemId, jwt}) => {
     return async (dispatch) => {
         dispatch({type: REMOVE_CART_ITEM_REQUEST});
         try{
-            const {data} = await api.delete(`/api/cart-item/${cartItemId}/remove`, {
+            const {data} = await api.delete(`/cart/cart-item/${cartItemId}/remove`, {
                 headers: {
                     Authorization: `Bearer ${jwt}`
                 }
@@ -116,7 +116,7 @@ export const clearCart = () => {
     return async (dispatch) => {
         dispatch({type: CLEAR_CART_REQUEST});
         try{
-            const {data} = await api.put(`/api/cart/clear`, {},{
+            const {data} = await api.put(`/cart/clear`, {},{
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("jwt")}`
                 }

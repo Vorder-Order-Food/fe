@@ -19,7 +19,7 @@ const Home = () => {
     useEffect(() => {
         dispatch(getAllRestaurants(jwt))
         dispatch(findCart(jwt))
-    }, []);
+    }, [jwt]);
 
     return (
         <div className='pb-10'>

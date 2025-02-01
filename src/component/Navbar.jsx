@@ -1,25 +1,38 @@
 import React, {useEffect} from 'react';
 import { motion } from 'framer-motion';
 import SearchIcon from '@mui/icons-material/Search';
-import { Avatar, Badge, IconButton } from "@mui/material";
+import {Avatar, Badge, Divider, IconButton, ListItemIcon, Menu, MenuItem} from "@mui/material";
 import { pink } from "@mui/material/colors";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import {Person} from "@mui/icons-material";
+import {Logout, Person, PersonAdd, Settings} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
+import {logout} from "../State/Authentication/Action";
 
 const Navbar = () => {
     const { user } = useSelector((store) => store.auth)
     const { cart } = useSelector((store) => store.cart)
     const navigate = useNavigate()
+    const dispatch = useNavigate()
 
-    const handleAvatarClick = () => {
-        if(user?.role === "ROLE_CUSTOMER"){
-            navigate("/my-profile")
-        } else {
-            navigate("/admin/restaurant")
-        }
-    }
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleLogout = () => {
+        handleClose(); // Close the menu first
+        setTimeout(() => {
+            dispatch(logout());
+        }, 0); // Ensure the logout action happens after re-render
+    };
+
+
+
 
 
     return (
@@ -52,12 +65,80 @@ const Navbar = () => {
                 <motion.div whileHover={{ rotate: 10 }} transition={{ type: "spring", stiffness: 200 }}>
                     {
                         user
-                            ? <Avatar onClick={handleAvatarClick} sx={{ bgcolor: "white", color: pink.A400 }}>{user?.fullName[0].toUpperCase()}</Avatar>
+                            ?
+                            <Avatar
+                                onClick={handleClick}
+                                size="small"
+                                aria-controls={open ? 'account-menu' : undefined}
+                                aria-haspopup="true"
+                                aria-expanded={open ? 'true' : undefined}
+                                    sx={{ bgcolor: "white", color: pink.A400 }}>{user?.username[0].toUpperCase()}</Avatar>
                             :
                             <IconButton onClick={() => navigate('/account/login')}>
                                 <Person/>
                             </IconButton>
                     }
+
+
+                        <Menu
+                            anchorEl={anchorEl}
+                            id="account-menu"
+                            open={open}
+                            onClose={handleClose}
+                            onClick={handleClose}
+                            slotProps={{
+                                paper: {
+                                    elevation: 0,
+                                    sx: {
+                                        overflow: 'visible',
+                                        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                                        mt: 1.5,
+                                        '& .MuiAvatar-root': {
+                                            width: 32,
+                                            height: 32,
+                                            ml: -0.5,
+                                            mr: 1,
+                                        },
+                                        '&::before': {
+                                            content: '""',
+                                            display: 'block',
+                                            position: 'absolute',
+                                            top: 0,
+                                            right: 14,
+                                            width: 10,
+                                            height: 10,
+                                            bgcolor: 'background.paper',
+                                            transform: 'translateY(-50%) rotate(45deg)',
+                                            zIndex: 0,
+                                        },
+                                    },
+                                },
+                            }}
+                            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                        >
+                            <MenuItem onClick={() => navigate("/my-profile")}>
+                                 My Profile
+                            </MenuItem>
+
+                            <Divider />
+                            {
+                                user?.roles[0]?.name === "ADMIN" &&    <MenuItem onClick={() => navigate("/admin/restaurant")}>
+                                    Go to admin dashboard
+                                </MenuItem>
+                            }
+
+
+                            <MenuItem onClick={handleLogout}>
+                                <ListItemIcon>
+                                    <Logout fontSize="small" />
+                                </ListItemIcon>
+                                Logout
+                            </MenuItem>
+                        </Menu>
+
+
+
                 </motion.div>
 
                 <motion.div whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.9 }}>

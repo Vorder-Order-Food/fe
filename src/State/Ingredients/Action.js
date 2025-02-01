@@ -66,7 +66,7 @@ export const createIngredientCategory = ({data ,jwt}) => {
 export const getIngredientCategory = ({id ,jwt}) => {
     return async (dispatch) => {
         try{
-            const res = await api.post(`/api/admin/ingredients/restaurant/${id}/category`,{
+            const res = await api.get(`/api/admin/ingredients/restaurant/${id}/category`,{
                 headers: {
                     Authorization: `Bearer ${jwt}`
                 }

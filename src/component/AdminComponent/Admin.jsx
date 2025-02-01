@@ -14,6 +14,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {getRestaurantById, getRestaurantCategory} from "../../State/Restaurant/Action";
 import {getMenuItemsByRestaurantId} from "../../State/Menu/Action";
 import {fetchRestaurantOrder} from "../../State/Restaurant Order/Action";
+import CreateRestaurantForm from "./CreateRestaurantForm";
 
 const Admin = () => {
 
@@ -29,10 +30,10 @@ const Admin = () => {
         dispatch(getRestaurantCategory({jwt, restaurantId: usersRestaurant?.id}))
         dispatch(fetchRestaurantOrder({
             restaurantId: usersRestaurant?.id,
-
             jwt
         }))
     }, [jwt]);
+
     return (
         <div>
             <div className='lg:flex justify-between'>
@@ -43,7 +44,7 @@ const Admin = () => {
 
                 <div className='lg:w-[80%]'>
                     <Routes>
-                        <Route path='/' element={<Dashboard/>}/>
+                        <Route path='/' element={<CreateRestaurantForm/>}/>
                         <Route path='/orders' element={<Orders/>}/>
                         <Route path='/menu' element={<Menu/>}/>
                         <Route path='/category' element={<FoodCategory/>}/>

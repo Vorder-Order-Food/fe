@@ -43,12 +43,13 @@ export const loginUser = (reqData) => async (dispatch) => {
             localStorage.setItem("jwt", data.result.token);
         }
 
-        const roles = data.result?.roles || [];
-        if (roles.includes("ADMIN")) {
-            reqData.navigate("/admin/restaurant");
-        } else {
-            reqData.navigate("/");
-        }
+        // const roles = data.result?.roles || [];
+        // if (roles.includes("ADMIN")) {
+        //     reqData.navigate("/admin/restaurant");
+        // } else {
+        //     reqData.navigate("/");
+        // }
+        reqData.navigate("/")
 
         dispatch({ type: LOGIN_SUCCESS, payload: data.result?.token });
 

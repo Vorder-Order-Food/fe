@@ -40,24 +40,37 @@ const Cart = () => {
 
 
     const handleSubmit = async (values) => {
-        const data ={
-            jwt: jwt,
-            order:{
-                // restaurantId: cartItems[0].food?.restaurant.id,
-            }
-        }
-        dispatch(createOrder(data))
-        console.log("form value", values)
-        await Swal.fire({
-            position: "top-end",
-            title: "Order Success! Please check your email!",
-            icon: "success",
-            showConfirmButton: false,
-            timer: 1500,
-            backdrop: false
-        });
-        dispatch(clearCart())
-        navigate("/my-profile/orders")
+       try{
+           const data ={
+               jwt: jwt,
+               order:{
+                   // restaurantId: cartItems[0].food?.restaurant.id,
+               }
+           }
+           await dispatch(createOrder(data))
+
+           console.log("form value", values)
+           await Swal.fire({
+               position: "top-end",
+               title: "Order Success! Please check your email!",
+               icon: "success",
+               showConfirmButton: false,
+               timer: 1500,
+               backdrop: false
+           });
+           // dispatch(clearCart())
+           // navigate("/my-profile/orders")
+       } catch (e){
+           console.log("cart error", e)
+           await Swal.fire({
+               position: "top-end",
+               title: "Out of stock",
+               icon: "error",
+               showConfirmButton: false,
+               timer: 1500,
+               backdrop: false
+           });
+       }
 
     }
     const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);

@@ -30,7 +30,7 @@ export const createPaymentLink = (reqData) => {
     }
 }
 
-export const createOrder = (reqData) => {
+export const createOrder =  (reqData) => {
     return async (dispatch) => {
         dispatch({type: CREATE_ORDER_REQUEST});
         try {
@@ -48,6 +48,12 @@ export const createOrder = (reqData) => {
 
         } catch (e) {
             dispatch({type: CREATE_ORDER_FAILURE, payload: e})
+            if (e.response) {
+                console.error("API Error Response:", e.response.data);
+                return Promise.reject(new Error(e.response.data.message || "Something went wrong"));
+            } else {
+                return Promise.reject(new Error("Server is not responding"));
+            }
         }
     }
 }

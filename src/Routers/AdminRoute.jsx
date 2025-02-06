@@ -1,6 +1,6 @@
 import React from 'react';
 import {Route, Routes} from "react-router-dom";
-import CreateRestaurantForm from "../component/AdminComponent/CreateRestaurantForm";
+import CreateProductForm from "../component/AdminComponent/CreateProductForm";
 import Admin from "../component/AdminComponent/Admin";
 import {useSelector} from "react-redux";
 
@@ -12,7 +12,7 @@ const AdminRoute = () => {
         <div>
 
             {/*<Routes>*/}
-            {/*    <Route path='/*' element={ !usersRestaurant ? <CreateRestaurantForm/> : <Admin/>}/>*/}
+            {/*    <Route path='/*' element={ !usersRestaurant ? <CreateProductForm/> : <Admin/>}/>*/}
             {/*</Routes>*/}
 
             <Routes>

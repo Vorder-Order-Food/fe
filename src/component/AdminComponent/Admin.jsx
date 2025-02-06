@@ -14,7 +14,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {getRestaurantById, getRestaurantCategory} from "../../State/Restaurant/Action";
 import {getMenuItemsByRestaurantId} from "../../State/Menu/Action";
 import {fetchRestaurantOrder} from "../../State/Restaurant Order/Action";
-import CreateRestaurantForm from "./CreateRestaurantForm";
+import CreateProductForm from "./CreateProductForm";
 
 const Admin = () => {
 
@@ -44,7 +44,7 @@ const Admin = () => {
 
                 <div className='lg:w-[80%]'>
                     <Routes>
-                        <Route path='/' element={<CreateRestaurantForm/>}/>
+                        <Route path='/' element={<CreateProductForm/>}/>
                         <Route path='/orders' element={<Orders/>}/>
                         <Route path='/menu' element={<Menu/>}/>
                         <Route path='/category' element={<FoodCategory/>}/>

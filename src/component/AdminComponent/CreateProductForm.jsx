@@ -13,16 +13,18 @@ import {useNavigate} from "react-router-dom";
 const initialValues = {
     name: "",
     price: "",
+    quantity: "",
     images: []
 }
 
-const CreateRestaurantForm = () => {
+const CreateProductForm = () => {
 
     const navigate = useNavigate();
 
     const dispatch = useDispatch()
     const { jwt } = useContext(AppContext)
     const [uploadImage, setUploadImage] = useState(false)
+
     const formik = useFormik({
         initialValues,
         validate: (values) => {
@@ -37,14 +39,25 @@ const CreateRestaurantForm = () => {
                 }
             }
 
+            if (!values.quantity || isNaN(values.quantity)) {
+                errors.quantity = 'Quantity must be a valid number';
+            } else {
+                const quantityAsLong = parseInt(values.quantity, 10);
+                if (isNaN(quantityAsLong) || quantityAsLong <= 0) {
+                    errors.quantity = 'Quantity must be a valid positive number';
+                }
+            }
+
             return errors;
         },
         onSubmit: (values) => {
             const priceAsLong = parseInt(values.price, 10);
+            const quantityAsLong = parseInt(values.quantity, 10);
             const data = {
                 name: values.name,
                 price: priceAsLong,
-                images: values.images
+                images: values.images,
+                quantity: quantityAsLong
             };
 
             console.log("data ---", data);
@@ -134,11 +147,20 @@ const CreateRestaurantForm = () => {
                         </TextField>
                     </Grid>
 
+                    <Grid item xs={12} >
+                        <TextField fullWidth id='quantity' name='quantity' label='Quantity' variant='outlined'
+                                   onChange={formik.handleChange}
+                                   value={formik.values.quantity}
+                        >
+
+                        </TextField>
+                    </Grid>
+
 
                 </Grid>
 
                 <Button variant='contained' color='primary' type='submit'>
-                    Create
+                    Add new food
                 </Button>
             </form>
 
@@ -149,4 +171,4 @@ const CreateRestaurantForm = () => {
     );
 };
 
-export default CreateRestaurantForm;
+export default CreateProductForm;
